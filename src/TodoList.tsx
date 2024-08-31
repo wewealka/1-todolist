@@ -1,15 +1,16 @@
-import { Button } from "./Button"
+import { FiltersValuesType } from './App'; 
 
-type TodoListPropsType = {
-    title: string
-    tasks: Array<TaskType>
-    RemoveTask: Function   
+export type TodoListPropsType = {
+    title: string;
+    tasks: Array<TaskType>;
+    RemoveTask: (id: number) => void;
+    ChangeFilter:(value:FiltersValuesType) => void;
     }
 
 export type TaskType = {
-    id: number
-    title: string
-    isDone: boolean
+    id: number;
+    title: string;
+    isDone: boolean;
 }
 
 
@@ -36,16 +37,16 @@ export const TodoList = (props:TodoListPropsType) => {
             <h3>{props.title}</h3>
             <div>
                 <input />
-                <Button title="+"/>
+                <button>+</button>
             </div>
                 <ul>
                     {TaskList}
                     
                 </ul>
             <div>
-                <Button title="All"/>
-                <Button title="Active"/>
-                <Button title="Completed"/>
+                <button onClick={() => props.ChangeFilter("All")}>All</button>
+                <button onClick={() => props.ChangeFilter("Active")}>Active</button>
+                <button onClick={() => props.ChangeFilter("Completed")}>Completed</button>
             </div>
         </div>
     )
