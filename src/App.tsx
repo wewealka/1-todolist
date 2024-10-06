@@ -4,8 +4,6 @@ import { TodoList } from './TodoList';
 
 
 
-export type FiltersValuesType = "All" | "Active" | "Completed";
-
 
 
 export function App() {
@@ -17,6 +15,42 @@ export function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //2-end way to work with useState
     // **************************************************************

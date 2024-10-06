@@ -1,8 +1,8 @@
-import { FiltersValuesType } from "../App";
-import { TaskType } from "../layout/ConceptWindows"
+import { v1 } from "uuid";
+import { FiltersValuesType, TaskType } from "../layout/ConceptWindows"
 
 
-export const UsageRemoveBtn = (tasks: TaskType[], id: number): TaskType[] => {
+export const UsageRemoveBtn = (tasks: TaskType[], id: string): TaskType[] => {
     return tasks.filter(task => task.id !== id);
 };
 
@@ -16,6 +16,14 @@ export const UsageFilterBtn = (tasks: TaskType[], filter: FiltersValuesType) => 
     }
 }
 
+    export const UsageAddTask = (tasks:TaskType[], title:string):TaskType[] => {
+        const NewTask: TaskType = {
+            id: v1(),
+            title: title,
+            isDone: false
+        };
+        return  [...tasks, NewTask];
+    }
 
 
 

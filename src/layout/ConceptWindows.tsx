@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { UsageFilterBtn, UsageRemoveBtn } from "../data/DataButton-2-todolist";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { UsageAddTask, UsageFilterBtn, UsageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/MainButton";
+
 
 export type FiltersValuesType = "All" | "Active" | "Completed"
 
 export type TaskType = {
-    id: number;
+    id: string;
     title: string;
     isDone: boolean;
 }
@@ -19,17 +20,40 @@ export type ConceptWindowsPropsType = {
 export const ConceptWindows = (props: ConceptWindowsPropsType) => {
 
 
-    const [TasksFilter] = useState<TaskType[]>(props.tasks)
-    const [CurrentTask, setCurrentTask] = useState(TasksFilter)
 
+    const [TasksFilter] = useState<TaskType[]>(props.tasks);
+    const [CurrentTask, setCurrentTask] = useState(TasksFilter);
+    const [newTaskTitle, setNewTaskTitle] = useState("");
 
 
     const ChooseOptionForTask = (filter: FiltersValuesType) => {
         setCurrentTask(UsageFilterBtn(props.tasks, filter))
     }
-    const removeTask = (id: number) => {
+    const RemoveTask = (id: string) => {
         setCurrentTask(prevTasks => UsageRemoveBtn(prevTasks, id));
     };
+
+    const AddTask = () => {
+        if (newTaskTitle.trim()) {
+            const updatedTask = UsageAddTask(CurrentTask, newTaskTitle)
+            setCurrentTask(updatedTask)
+            setNewTaskTitle("")
+        }else {
+            alert("the field must be filled in")
+        }
+    };
+
+
+// избавимся от js в разметке input
+    const NewTitleChangeHeandler = (e:ChangeEvent<HTMLInputElement>) => {
+        setNewTaskTitle(e.target.value)
+    }
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Enter') {
+                AddTask()
+            }
+    }
+ // избавимся от js в разметке input
 
 
 
@@ -38,7 +62,7 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
             <li key={tasks.id}>
                 <input type="checkbox" checked={tasks.isDone} />
                 <span>{tasks.title}</span>
-                <MainButton name={"X"} callBack={() => removeTask(tasks.id)} />
+                <MainButton name={"X"} callBack={() => RemoveTask(tasks.id)} />
             </li>
         )
     })
@@ -46,8 +70,12 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         <div className="ConceptWindows">
             <h3>{props.title}</h3>
             <div>
-                <input />
-                <button>+</button>
+                <input
+                    value={newTaskTitle}
+                    onChange={NewTitleChangeHeandler}  // вот пор эту разметку 
+                    onKeyUp={onKeyPressHandler} // вот пор эту разметку 
+                    />
+                <MainButton name={"+"} callBack={AddTask} />
             </div>
             <ul>
                 {TaskList}
