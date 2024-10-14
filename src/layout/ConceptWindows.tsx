@@ -1,6 +1,7 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { useState } from "react";
 import { UsageAddTask, UsageFilterBtn, UsageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/MainButton";
+import { MainInput } from "../components/input/MainInput";
 
 
 export type FiltersValuesType = "All" | "Active" | "Completed"
@@ -26,6 +27,8 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
     const [newTaskTitle, setNewTaskTitle] = useState("");
 
 
+
+
     const ChooseOptionForTask = (filter: FiltersValuesType) => {
         setCurrentTask(UsageFilterBtn(props.tasks, filter))
     }
@@ -44,19 +47,6 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
     };
 
 
-// избавимся от js в разметке input
-    const NewTitleChangeHeandler = (e:ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.target.value)
-    }
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter') {
-                AddTask()
-            }
-    }
- // избавимся от js в разметке input
-
-
-
     const TaskList: Array<JSX.Element> = CurrentTask.map((tasks: TaskType) => {
         return (
             <li key={tasks.id}>
@@ -70,12 +60,8 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         <div className="ConceptWindows">
             <h3>{props.title}</h3>
             <div>
-                <input
-                    value={newTaskTitle}
-                    onChange={NewTitleChangeHeandler}  // вот пор эту разметку 
-                    onKeyUp={onKeyPressHandler} // вот пор эту разметку 
-                    />
-                <MainButton name={"+"} callBack={AddTask} />
+                <MainInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle}  AddTask = {AddTask}/>
+                
             </div>
             <ul>
                 {TaskList}
@@ -88,3 +74,19 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         </div>
     )
 }
+
+// const inputRef = useRef<HTMLInputElement>(null)
+
+// ref={inputRef}
+// onKeyUp={onKeyPressHandler}
+
+// const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+//     if (e.key === "Enter" && inputRef.current) {
+//         const newTaskTitle = inputRef.current.value.trim();
+//     }  newTaskTitle ? (
+//     setCurrentTask(UsageAddTask(CurrentTask, newTaskTitle)),
+//     inputRef.current.value = ''
+// ) : alert("the field must be filled in");
+//         }
+//     }
+// }
