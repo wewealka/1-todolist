@@ -25,10 +25,11 @@ export const UsageFilterBtn = (tasks: TaskType[], filter: FiltersValuesType) => 
         return  [...tasks, NewTask];
     }
 
-
-
-
-
+    export const UsageChangeStatusBtn = (tasks: TaskType[], id: string, status:boolean):TaskType[] =>{
+        let stateForStatus = tasks.find(eachT=> eachT.id === id)
+        stateForStatus ? stateForStatus.isDone = status : console.log("bad news")
+        return [...tasks]
+    }
 
 
 
