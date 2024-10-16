@@ -1,15 +1,19 @@
 import { ChangeEvent, KeyboardEvent } from "react";
 import { MainButton } from "../MainButton";
+import { UsageAddTask } from "../../data/DataButton-2-todolist";
+import { TaskType } from "../../layout/ConceptWindows";
 
 {/* interface */} type MainInputProps = {
     newTaskTitle: string;
-    setNewTaskTitle?: (title: string) => void;
-    AddTask?: () => void;
+    setNewTaskTitle: (title: string) => void;
+    TasksFilter:TaskType[]
+    setCurrentTask: React.Dispatch<React.SetStateAction<TaskType[]>>
+    setTasksFilter: React.Dispatch<React.SetStateAction<TaskType[]>>
 }
 
 const defaultAddTitle = () => {};//Fallback 
 
-export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitle, AddTask}) => {
+export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitle, TasksFilter, setCurrentTask, setTasksFilter}) => {
 
     const InputController = !newTaskTitle
     const ULM = `${10-newTaskTitle.length} chars left`
@@ -18,13 +22,24 @@ export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitl
 
     
     const NewTitleChangeHeandler = (e:ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle?.(e.target.value)
+        setNewTaskTitle(e.target.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            ULMcontroller ? AddTask?.() : alert("Message should be correct");
+            ULMcontroller ? AddTask() : alert("Message should be correct");
         }
     }
+
+    const AddTask = () => {
+        if (newTaskTitle.trim()) {
+            const updatedTasks = UsageAddTask(TasksFilter, newTaskTitle);
+            setCurrentTask(updatedTasks);
+            setTasksFilter(updatedTasks);
+            setNewTaskTitle("");
+        } else {
+            alert("Message should be correct");
+        }
+    };
     return (
         <div>
             <input
@@ -34,7 +49,7 @@ export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitl
             <MainButton
                 disabled = {InputController || ULMcontrollerUI}
                 name={"+"}
-                callBack={AddTask || defaultAddTitle} />
+                callBack={AddTask} />
             {(!InputController && !ULMcontrollerUI) && <div>{ULM}</div>}
             {ULMcontrollerUI && <div style={{color: "red"}}>Too many chars</div>}
         </div>
