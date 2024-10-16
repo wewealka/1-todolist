@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { UsageAddTask, UsageFilterBtn, UsageRemoveBtn } from "../data/DataButton-2-todolist";
+import { ChangeEvent, useState } from "react";
+import { UsageAddTask, UsageChangeStatusBtn, UsageFilterBtn, UsageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/MainButton";
 import { MainInput } from "../components/input/MainInput";
 
@@ -20,37 +20,45 @@ export type ConceptWindowsPropsType = {
 
 export const ConceptWindows = (props: ConceptWindowsPropsType) => {
 
-
-
-    const [TasksFilter] = useState<TaskType[]>(props.tasks);
+    const [TasksFilter, setTasksFilter] = useState<TaskType[]>(props.tasks);
     const [CurrentTask, setCurrentTask] = useState(TasksFilter);
     const [newTaskTitle, setNewTaskTitle] = useState("");
-
-
-
+    const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
 
     const ChooseOptionForTask = (filter: FiltersValuesType) => {
-        setCurrentTask(UsageFilterBtn(props.tasks, filter))
-    }
-    const RemoveTask = (id: string) => {
-        setCurrentTask(prevTasks => UsageRemoveBtn(prevTasks, id));
+        const filteredTasks = UsageFilterBtn(TasksFilter, filter);
+        setCurrentTask(filteredTasks);
+        setActiveFilter(filter);
     };
 
-    const AddTask = () => {
-        if (newTaskTitle.trim()) {
-            const updatedTask = UsageAddTask(CurrentTask, newTaskTitle)
-            setCurrentTask(updatedTask)
-            setNewTaskTitle("")
-        }else {
-            alert("the field must be filled in")
-        }
+    const RemoveTask = (id: string) => {
+        const updatedTasks = UsageRemoveBtn(TasksFilter, id);
+        setCurrentTask(updatedTasks);
+        setTasksFilter(updatedTasks);
     };
+
+
+    const ChangeStatus = (id: string, status: boolean) => {
+        const updatedTasks = UsageChangeStatusBtn(CurrentTask, id, status);
+        setCurrentTask([...updatedTasks]);
+        setTasksFilter([...updatedTasks]);
+    };
+
 
 
     const TaskList: Array<JSX.Element> = CurrentTask.map((tasks: TaskType) => {
+
+        const OnChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            ChangeStatus(tasks.id, e.currentTarget.checked)
+        }
         return (
             <li key={tasks.id}>
-                <input type="checkbox" checked={tasks.isDone} />
+                <input
+                    type="checkbox"
+                    onChange={OnChangeStatusHandler}
+                    checked={tasks.isDone} 
+                    className={tasks.isDone ? "checked" : ""}
+                    />
                 <span>{tasks.title}</span>
                 <MainButton name={"X"} callBack={() => RemoveTask(tasks.id)} />
             </li>
@@ -60,16 +68,33 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         <div className="ConceptWindows">
             <h3>{props.title}</h3>
             <div>
-                <MainInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle}  AddTask = {AddTask}/>
-                
+                <MainInput
+                    newTaskTitle={newTaskTitle}
+                    setNewTaskTitle={setNewTaskTitle}
+                    TasksFilter={TasksFilter}
+                    setCurrentTask={setCurrentTask}
+                    setTasksFilter={setTasksFilter}
+                />
             </div>
             <ul>
                 {TaskList}
             </ul>
             <div>
-                <MainButton name={"ALL"} callBack={() => ChooseOptionForTask("All")} />
-                <MainButton name={"Active"} callBack={() => ChooseOptionForTask("Active")} />
-                <MainButton name={"Completed"} callBack={() => ChooseOptionForTask("Completed")} />
+                <MainButton 
+                className={activeFilter === "All" ? "active" : ""} 
+                name={"ALL"} 
+                callBack={() => ChooseOptionForTask("All")}
+                />
+                <MainButton
+                className={activeFilter === "Active" ? "active" : ""}
+                name={"Active"} 
+                callBack={() => ChooseOptionForTask("Active")} 
+                />
+                <MainButton 
+                className={activeFilter === "Completed" ? "active" : ""} 
+                name={"Completed"} 
+                callBack={() => ChooseOptionForTask("Completed")} 
+                />
             </div>
         </div>
     )
