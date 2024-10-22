@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/mainbtn/MainButton";
 import { MainInput } from "../components/input/MainInput";
@@ -28,36 +28,40 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         setTasks(updatedTasks);
     };
 
-    const changeStatus = (id: string) => {
-        const updatedTasks = usageChangeStatusBtn(tasks, id);
+    const changeStatus = (id: string, nesStatus: boolean) => {
+        const updatedTasks = usageChangeStatusBtn(tasks, id, nesStatus);
         setTasks(updatedTasks);
     };
+    
 
     const filters: FiltersValuesType[] = ["All", "Active", "Completed"];
     const buttonList = filters.map(filter => (
         <MainButton
             key={filter}
             name={filter}
-            className={activeFilter === filter ? "active" : ""}
+            className={activeFilter === filter ? "active" : undefined}
             callBack={() => setActiveFilter(filter)}
         />
     ))
 
-    const taskList = filteredTasks.map((task: TaskType) => (
-        <li key={task.id}>
+    const taskList = filteredTasks.map((task: TaskType) => {
+        const changeStatusHandler = (e:ChangeEvent<HTMLInputElement>) => changeStatus (task.id, e.currentTarget.checked)
+        return (
+            <li key={task.id}>
             <input
                 type="checkbox"
-                onChange={() => changeStatus(task.id)}
+                onChange={changeStatusHandler}
                 checked={task.isDone}
-                className={task.isDone ? "checked" : ""}
+                
             />
-            <span>{task.title}</span>
+            <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
             <MainButton name={"X"} callBack={() => removeTask(task.id)} />
         </li>
-    ));
+        )
+    });
 
     return (
-        <div className="ConceptWindows">
+        <div>
             <h3>{props.title}</h3>
             <div>
                 <MainInput
