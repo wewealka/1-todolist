@@ -34,8 +34,8 @@ const StyledCon = styled.div`
 const StyledTaskGroup = styled.div`
     flex: 1 1 calc(25% - 20px);
     min-width: 200px;
-    border: 1px solid black;
     border-radius: 5px;
-    padding: 10px;
-    background-color: aqua;
+    padding: 15px;
+    background-color: cadetblue;
+    border: 3px solid aqua;
 `;
