@@ -22,7 +22,7 @@ export const usageAddTask = (tasks: TaskType[], title: string): TaskType[] => {
     return [newTask, ...tasks];
 }
 
-export const usageChangeStatusBtn = (tasks: TaskType[], taskId: string) => {
-    return tasks.map(t => t.id === taskId ? { ...t, isDone: !t.isDone } : t)
+export const usageChangeStatusBtn = (tasks: TaskType[], taskId: string, newStatus:boolean) => {
+    return tasks.map(t => t.id === taskId ? { ...t, isDone: newStatus } : t)
 }
 
