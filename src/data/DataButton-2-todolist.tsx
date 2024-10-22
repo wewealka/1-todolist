@@ -22,7 +22,7 @@ export const UsageFilterBtn = (tasks: TaskType[], filter: FiltersValuesType) => 
             title: title,
             isDone: false
         };
-        return  [...tasks, NewTask];
+        return  [NewTask, ...tasks];
     }
 
     export const UsageChangeStatusBtn = (tasks: TaskType[], id: string, status:boolean):TaskType[] =>{
