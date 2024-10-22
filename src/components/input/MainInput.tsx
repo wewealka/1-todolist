@@ -1,39 +1,36 @@
 import { ChangeEvent, KeyboardEvent } from "react";
-import { MainButton } from "../MainButton";
-import { UsageAddTask } from "../../data/DataButton-2-todolist";
+import { MainButton } from "../mainbtn/MainButton";
+import { usageAddTask } from "../../data/DataButton-2-todolist";
 import { TaskType } from "../../layout/ConceptWindows";
 
-{/* interface */} type MainInputProps = {
+type MainInputProps = {
     newTaskTitle: string;
     setNewTaskTitle: (title: string) => void;
-    TasksFilter:TaskType[]
-    setCurrentTask: React.Dispatch<React.SetStateAction<TaskType[]>>
+    tasksFilter: TaskType[]
     setTasksFilter: React.Dispatch<React.SetStateAction<TaskType[]>>
 }
 
-const defaultAddTitle = () => {};//Fallback 
 
-export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitle, TasksFilter, setCurrentTask, setTasksFilter}) => {
+export const MainInput: React.FC<MainInputProps> = ({ newTaskTitle, setNewTaskTitle, tasksFilter, setTasksFilter }) => {
 
-    const InputController = !newTaskTitle
-    const ULM = `${10-newTaskTitle.length} chars left`
-    const ULMcontrollerUI = newTaskTitle.length > 10 
-    const ULMcontroller = newTaskTitle.length <= 10 
+    const inputController = !newTaskTitle
+    const uLM = `${10 - newTaskTitle.length} chars left`
+    const uLMcontrollerUI = newTaskTitle.length > 10
+    const uLMcontroller = newTaskTitle.length <= 10
 
-    
-    const NewTitleChangeHeandler = (e:ChangeEvent<HTMLInputElement>) => {
+
+    const newTitleChangeHeandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.target.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            ULMcontroller ? AddTask() : alert("Message should be correct");
+            uLMcontroller ? addTask() : alert("Message should be correct");
         }
     }
 
-    const AddTask = () => {
+    const addTask = () => {
         if (newTaskTitle.trim()) {
-            const updatedTasks = UsageAddTask(TasksFilter, newTaskTitle);
-            setCurrentTask(updatedTasks);
+            const updatedTasks = usageAddTask(tasksFilter, newTaskTitle);
             setTasksFilter(updatedTasks);
             setNewTaskTitle("");
         } else {
@@ -43,15 +40,15 @@ export const MainInput: React.FC<MainInputProps> = ({newTaskTitle,setNewTaskTitl
     return (
         <div>
             <input
-            value={newTaskTitle}
-            onChange={NewTitleChangeHeandler}
-            onKeyDown={onKeyPressHandler}/>
+                value={newTaskTitle}
+                onChange={newTitleChangeHeandler}
+                onKeyDown={onKeyPressHandler} />
             <MainButton
-                disabled = {InputController || ULMcontrollerUI}
+                disabled={inputController || uLMcontrollerUI}
                 name={"+"}
-                callBack={AddTask} />
-            {(!InputController && !ULMcontrollerUI) && <div>{ULM}</div>}
-            {ULMcontrollerUI && <div style={{color: "red"}}>Too many chars</div>}
+                callBack={addTask} />
+            {(!inputController && !uLMcontrollerUI) && <div>{uLM}</div>}
+            {uLMcontrollerUI && <div style={{ color: "red" }}>Too many chars</div>}
         </div>
     );
 }; 
