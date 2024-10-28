@@ -2,16 +2,21 @@
 import styled from 'styled-components';
 import { InitialTasks } from '../data/DataAppBLL-1-todolist';
 import { ConceptWindows } from '../layout/ConceptWindows';
+import { useState } from 'react';
+import { InputConWin } from './input/InputCW';
 
 export const TodoList = () => {
+    let [newNote, setNewNote] = useState(InitialTasks)
+    const taskList = newNote.map((taskGroup, index) => (
+        <StyledTaskGroup key={index}>
+            <ConceptWindows title={taskGroup.title} tasks={taskGroup.tasks} />
+        </StyledTaskGroup>
+    ));
     return (
         <StyledCon>
+            <div><InputConWin newNote={newNote} setNewNote={setNewNote}/></div>
             <StyledTodoList>
-                {InitialTasks.map((taskGroup, index) => (
-                    <StyledTaskGroup key={index}>
-                        <ConceptWindows title={taskGroup.title} tasks={taskGroup.tasks} />
-                    </StyledTaskGroup>
-                ))}
+                {taskList}
             </StyledTodoList>
         </StyledCon>
     );
