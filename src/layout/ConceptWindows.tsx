@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/mainbtn/MainButton";
 import { MainInput } from "../components/input/MainInput";
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 export type FiltersValuesType = "All" | "Active" | "Completed";
 
@@ -17,6 +18,7 @@ export type ConceptWindowsPropsType = {
 };
 
 export const ConceptWindows = (props: ConceptWindowsPropsType) => {
+    const [listRef] = useAutoAnimate<HTMLUListElement>()
     const [tasks, setTasks] = useState<TaskType[]>(props.tasks);
     const [newTaskTitle, setNewTaskTitle] = useState("");
     const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
@@ -32,7 +34,7 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
         const updatedTasks = usageChangeStatusBtn(tasks, id, nesStatus);
         setTasks(updatedTasks);
     };
-    
+
 
     const filters: FiltersValuesType[] = ["All", "Active", "Completed"];
     const buttonList = filters.map(filter => (
@@ -45,18 +47,18 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
     ))
 
     const taskList = filteredTasks.map((task: TaskType) => {
-        const changeStatusHandler = (e:ChangeEvent<HTMLInputElement>) => changeStatus (task.id, e.currentTarget.checked)
+        const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeStatus(task.id, e.currentTarget.checked)
         return (
             <li key={task.id}>
-            <input
-                type="checkbox"
-                onChange={changeStatusHandler}
-                checked={task.isDone}
-                
-            />
-            <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
-            <MainButton name={"X"} callBack={() => removeTask(task.id)} />
-        </li>
+                <input
+                    type="checkbox"
+                    onChange={changeStatusHandler}
+                    checked={task.isDone}
+
+                />
+                <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
+                <MainButton name={"X"} callBack={() => removeTask(task.id)} />
+            </li>
         )
     });
 
@@ -71,7 +73,9 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
                     setTasksFilter={setTasks}
                 />
             </div>
-            <ul>{taskList}</ul>
+            <ul ref={listRef}>
+                {taskList}
+            </ul>
             <div>
                 {buttonList}
             </div>
