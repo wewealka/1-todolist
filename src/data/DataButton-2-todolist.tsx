@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { FiltersValuesType, TaskType } from "../layout/ConceptWindows"
+import { ConceptWindowsPropsType, FiltersValuesType, TaskType } from "../layout/ConceptWindows"
 
 
 export const usageRemoveBtn = (tasks: TaskType[], id: string): TaskType[] => {
@@ -26,3 +26,12 @@ export const usageChangeStatusBtn = (tasks: TaskType[], taskId: string, newStatu
     return tasks.map(t => t.id === taskId ? { ...t, isDone: newStatus } : t)
 }
 
+export const usageAddNote = (database:ConceptWindowsPropsType[], newTitle:string) => {
+    return [
+        ...database,
+        {
+            title: newTitle,
+            tasks: []
+        }
+    ];
+}
