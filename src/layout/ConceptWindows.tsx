@@ -71,7 +71,7 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj}) => {
             <h3>{mainObj.title}</h3>
             <div>
                 <CombinedInput
-                    newTaskTitle={newTaskTitle ?? ""}
+                    newTaskTitle={newTaskTitle}
                     setNewTaskTitle={setNewTaskTitle}
                     tasksFilter={tasks}
                     setTasksFilter={setTasks}
