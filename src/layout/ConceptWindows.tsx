@@ -1,8 +1,8 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/mainbtn/MainButton";
-import { MainInput } from "../components/input/MainInput";
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { CombinedInput } from "../components/input/InputU";
 
 export type FiltersValuesType = "All" | "Active" | "Completed";
 
@@ -11,17 +11,21 @@ export type TaskType = {
     title: string;
     isDone: boolean;
 };
-
 export type ConceptWindowsPropsType = {
     title: string;
     tasks: Array<TaskType>;
 };
+export type MainType = {
+    mainObj: ConceptWindowsPropsType
+}
 
-export const ConceptWindows = (props: ConceptWindowsPropsType) => {
+
+
+export const ConceptWindows: React.FC<MainType> = ({ mainObj}) => {
     const [listRef] = useAutoAnimate<HTMLUListElement>()
-    const [tasks, setTasks] = useState<TaskType[]>(props.tasks);
-    const [newTaskTitle, setNewTaskTitle] = useState("");
+    const [tasks, setTasks] = useState<TaskType[]>(mainObj.tasks);
     const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
+    const [newTaskTitle, setNewTaskTitle] = useState("");
 
     const filteredTasks = usageFilterBtn(tasks, activeFilter);
 
@@ -61,13 +65,13 @@ export const ConceptWindows = (props: ConceptWindowsPropsType) => {
             </li>
         )
     });
-
+    
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{mainObj.title}</h3>
             <div>
-                <MainInput
-                    newTaskTitle={newTaskTitle}
+                <CombinedInput
+                    newTaskTitle={newTaskTitle ?? ""}
                     setNewTaskTitle={setNewTaskTitle}
                     tasksFilter={tasks}
                     setTasksFilter={setTasks}
