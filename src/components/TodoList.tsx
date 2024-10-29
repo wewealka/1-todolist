@@ -3,18 +3,20 @@ import styled from 'styled-components';
 import { InitialTasks } from '../data/DataAppBLL-1-todolist';
 import { ConceptWindows } from '../layout/ConceptWindows';
 import { useState } from 'react';
-import { InputConWin } from './input/InputCW';
+import { CombinedInput } from './input/InputU';
 
 export const TodoList = () => {
     let [newNote, setNewNote] = useState(InitialTasks)
+    const [newTaskTitle, setNewTaskTitle] = useState("");
+
     const taskList = newNote.map((taskGroup, index) => (
         <StyledTaskGroup key={index}>
-            <ConceptWindows title={taskGroup.title} tasks={taskGroup.tasks} />
+            <ConceptWindows mainObj={taskGroup}/>
         </StyledTaskGroup>
     ));
     return (
         <StyledCon>
-            <div><InputConWin newNote={newNote} setNewNote={setNewNote}/></div>
+            <div><CombinedInput newNote={newNote} setNewNote={setNewNote} newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle}/></div>
             <StyledTodoList>
                 {taskList}
             </StyledTodoList>
