@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
+import { usageAddTask, usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/mainbtn/MainButton";
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { CombinedInput } from "../components/input/InputU";
@@ -26,43 +26,35 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
     const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
-    const filteredTasks = usageFilterBtn(tasks, activeFilter);
-
     const removeTask = (id: string) => {
         const updatedTasks = usageRemoveBtn(tasks, id);
         setTasks(updatedTasks);
     };
 
-    const changeStatus = (id: string, nesStatus: boolean) => {
-        const updatedTasks = usageChangeStatusBtn(tasks, id, nesStatus);
+    const changeStatus = (id: string, newStatus: boolean) => {
+        const updatedTasks = usageChangeStatusBtn(tasks, id, newStatus);
         setTasks(updatedTasks);
     };
 
-    const filters: FiltersValuesType[] = ["All", "Active", "Completed"];
+    const addTask = () => {
+        const updatedTasks = usageAddTask(tasks, newTaskTitle);
+        setTasks(updatedTasks);
+        setNewTaskTitle(""); 
+    };
 
-    const buttonList = filters.map(filter => (
-        <MainButton
-            key={filter}
-            name={filter}
-            className={activeFilter === filter ? "active" : undefined}
-            callBack={() => setActiveFilter(filter)}
-        />
+    const filteredTasks = usageFilterBtn(tasks, activeFilter);
+
+    const taskList = filteredTasks.map((task: TaskType) => (
+        <li key={task.id}>
+            <input
+                type="checkbox"
+                onChange={(e) => changeStatus(task.id, e.currentTarget.checked)}
+                checked={task.isDone}
+            />
+            <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
+            <MainButton name={"X"} callBack={() => removeTask(task.id)} />
+        </li>
     ));
-
-    const taskList = filteredTasks.map((task: TaskType) => {
-        const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeStatus(task.id, e.currentTarget.checked);
-        return (
-            <li key={task.id}>
-                <input
-                    type="checkbox"
-                    onChange={changeStatusHandler}
-                    checked={task.isDone}
-                />
-                <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
-                <MainButton name={"X"} callBack={() => removeTask(task.id)} />
-            </li>
-        );
-    });
 
     return (
         <div>
@@ -74,15 +66,21 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
                 <CombinedInput
                     newTaskTitle={newTaskTitle}
                     setNewTaskTitle={setNewTaskTitle}
-                    tasksFilter={tasks}
-                    setTasksFilter={setTasks}
+                    onSubmit={addTask}
                 />
             </div>
             <ul ref={listRef}>
                 {taskList}
             </ul>
             <div>
-                {buttonList}
+                {["All", "Active", "Completed"].map((filter) => (
+                    <MainButton
+                        key={filter}
+                        name={filter}
+                        className={activeFilter === filter ? "active" : undefined}
+                        callBack={() => setActiveFilter(filter as FiltersValuesType)}
+                    />
+                ))}
             </div>
         </div>
     );
