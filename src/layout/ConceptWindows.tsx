@@ -5,27 +5,26 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { CombinedInput } from "../components/input/InputU";
 
 export type FiltersValuesType = "All" | "Active" | "Completed";
-
 export type TaskType = {
     id: string;
     title: string;
     isDone: boolean;
 };
 export type ConceptWindowsPropsType = {
+    cwId: string
     title: string;
     tasks: Array<TaskType>;
 };
 export type MainType = {
-    mainObj: ConceptWindowsPropsType
-}
+    mainObj: ConceptWindowsPropsType;
+    onRemoveWindow: (title: string) => void;
+};
 
-
-
-export const ConceptWindows: React.FC<MainType> = ({ mainObj}) => {
-    const [listRef] = useAutoAnimate<HTMLUListElement>()
+export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) => {
+    const [listRef] = useAutoAnimate<HTMLUListElement>();
     const [tasks, setTasks] = useState<TaskType[]>(mainObj.tasks);
     const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
-    const [newTaskTitle, setNewTaskTitle] = useState("");
+    const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
     const filteredTasks = usageFilterBtn(tasks, activeFilter);
 
@@ -39,8 +38,8 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj}) => {
         setTasks(updatedTasks);
     };
 
-
     const filters: FiltersValuesType[] = ["All", "Active", "Completed"];
+
     const buttonList = filters.map(filter => (
         <MainButton
             key={filter}
@@ -48,27 +47,29 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj}) => {
             className={activeFilter === filter ? "active" : undefined}
             callBack={() => setActiveFilter(filter)}
         />
-    ))
+    ));
 
     const taskList = filteredTasks.map((task: TaskType) => {
-        const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeStatus(task.id, e.currentTarget.checked)
+        const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeStatus(task.id, e.currentTarget.checked);
         return (
             <li key={task.id}>
                 <input
                     type="checkbox"
                     onChange={changeStatusHandler}
                     checked={task.isDone}
-
                 />
                 <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
                 <MainButton name={"X"} callBack={() => removeTask(task.id)} />
             </li>
-        )
+        );
     });
-    
+
     return (
         <div>
-            <h3>{mainObj.title}</h3>
+            <h3>
+                {mainObj.title}
+                <MainButton name={"X"} callBack={() => onRemoveWindow(mainObj.cwId)} />
+            </h3>
             <div>
                 <CombinedInput
                     newTaskTitle={newTaskTitle}
