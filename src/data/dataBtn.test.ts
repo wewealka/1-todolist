@@ -1,6 +1,6 @@
 import { ConceptWindowsPropsType, TaskType } from "../layout/ConceptWindows";
 import { v1 } from "uuid";
-export const InitialTasks: Array<ConceptWindowsPropsType> = [
+const InitialTasks: Array<ConceptWindowsPropsType> = [
     {   
         cwId: v1(),
         title: "What to learn",
@@ -12,7 +12,7 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
         ],
     }
 ];
-export const usageAddNote = (database:ConceptWindowsPropsType[], newTitle:string) => {
+const usageAddNote = (database:ConceptWindowsPropsType[], newTitle:string) => {
     return [
         ...database,
         {   
@@ -35,7 +35,7 @@ test("immutability note", ()=> {
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-export const usageAddTask = (tasks: TaskType[], title: string): TaskType[] => {     
+const usageAddTask = (tasks: TaskType[], title: string): TaskType[] => {     
     const newTask: TaskType = {
         id: v1(),
         title: title,
