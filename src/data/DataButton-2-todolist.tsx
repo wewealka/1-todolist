@@ -7,7 +7,7 @@ export const usageRemoveBtn = (tasks: TaskType[], id: string): TaskType[] => {
 };
 
 export const usageRemoveWinBtn = (windows: ConceptWindowsPropsType[], cwIdDel: string): ConceptWindowsPropsType[] => {
-    return windows.filter(c => c.cwId !== cwIdDel);
+    return windows.filter(c => c.cwId !== cwIdDel); 
 };
 
 
