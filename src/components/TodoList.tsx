@@ -3,38 +3,42 @@ import { InitialTasks } from '../data/DataAppBLL-1-todolist';
 import { ConceptWindows, ConceptWindowsPropsType } from '../layout/ConceptWindows';
 import { useState } from 'react';
 import { CombinedInput } from './input/InputU';
-import { usageRemoveWinBtn } from '../data/DataButton-2-todolist';
+import { usageAddNote, usageRemoveWinBtn } from '../data/DataButton-2-todolist';
 
 export const TodoList = () => {
     let [newNote, setNewNote] = useState<ConceptWindowsPropsType[]>(InitialTasks);
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
-    const removeWindow = (cwId:string) => {
-        const newWitDelNote = usageRemoveWinBtn(newNote, cwId);
-        setNewNote(newWitDelNote);
+    const removeWindow = (cwId: string) => {
+        const updatedNotes = usageRemoveWinBtn(newNote, cwId);
+        setNewNote(updatedNotes);
     };
 
-    const taskList = newNote.map((taskGroup, index) => (
-        <StyledTaskGroup key={index}>
-            <ConceptWindows
-                mainObj={taskGroup}
-                onRemoveWindow={removeWindow}
-            />
-        </StyledTaskGroup>
-    ));
+    const addNote = () => {
+        const updatedNotes = usageAddNote(newNote, newTaskTitle);
+        setNewNote(updatedNotes);
+        setNewTaskTitle("");  
+    };
 
     return (
         <StyledCon>
-            <div>
+            <StyledInput>
+                <p>New Note</p>
                 <CombinedInput
-                    newNote={newNote}
-                    setNewNote={setNewNote}
                     newTaskTitle={newTaskTitle}
                     setNewTaskTitle={setNewTaskTitle}
+                    onSubmit={addNote}
                 />
-            </div>
+            </StyledInput>
             <StyledTodoList>
-                {taskList}
+                {newNote.map((taskGroup) => (
+                    <StyledTaskGroup key={taskGroup.cwId}>
+                        <ConceptWindows
+                            mainObj={taskGroup}
+                            onRemoveWindow={removeWindow}
+                        />
+                    </StyledTaskGroup>
+                ))}
             </StyledTodoList>
         </StyledCon>
     );
@@ -62,3 +66,13 @@ const StyledTaskGroup = styled.div`
     background-color: cadetblue;
     border: 3px solid aqua;
 `;
+
+const StyledInput = styled.div`
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+    margin-top: 0px ;
+    background-color: rgba(12, 3, 27, 0.3);
+    margin-bottom: 15px ;
+`
