@@ -4,7 +4,8 @@ import { ConceptWindowsPropsType } from "../layout/ConceptWindows";
 
 
 export const InitialTasks: Array<ConceptWindowsPropsType> = [
-    {
+    {   
+        cwId: v1(),
         title: "What to learn",
         tasks: [
             { id: v1(), title: "HTML", isDone: true },
@@ -13,7 +14,8 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
             { id: v1(), title: "Redux", isDone: false },
         ],
     },
-    {
+    {   
+        cwId: v1(),
         title: "What to buy",
         tasks: [
             { id: v1(), title: "Cola", isDone: false },
@@ -21,7 +23,8 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
             { id: v1(), title: "Ice", isDone: false },
         ],
     },
-    {
+    {   
+        cwId: v1(),
         title: "What a Goal",
         tasks: [
             { id: v1(), title: "Comp", isDone: false },
@@ -29,7 +32,8 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
             { id: v1(), title: "Keyboard", isDone: false },
         ],
     },
-    {
+    {   
+        cwId: v1(),
         title: "device_by",
         tasks: [
             { id: v1(), title: "Header", isDone: false },
@@ -39,7 +43,8 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
             { id: v1(), title: "Store", isDone: false },
         ],
     },
-    {
+    {   
+        cwId: v1(),
         title: "AI make up",
         tasks: [
             { id: v1(), title: "Global", isDone: false },
@@ -50,7 +55,8 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
             { id: v1(), title: "WIN", isDone: false },
         ],
     },
-    {
+    {   
+        cwId: v1(),
         title: "encrypt/decrypt",
         tasks: [
             { id: v1(), title: "encrypt", isDone: true },
@@ -58,5 +64,5 @@ export const InitialTasks: Array<ConceptWindowsPropsType> = [
         ],
     },
 ];
-console.log(InitialTasks)
+
 

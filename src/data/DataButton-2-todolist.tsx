@@ -6,6 +6,10 @@ export const usageRemoveBtn = (tasks: TaskType[], id: string): TaskType[] => {
     return tasks.filter(task => task.id !== id);
 };
 
+export const usageRemoveWinBtn = (windows: ConceptWindowsPropsType[], cwIdDel: string): ConceptWindowsPropsType[] => {
+    return windows.filter(c => c.cwId !== cwIdDel);
+};
+
 
 export const usageFilterBtn = (tasks: TaskType[], filter: FiltersValuesType) => {
     return filter === "Active" ? tasks.filter(task => !task.isDone) :
@@ -29,7 +33,8 @@ export const usageChangeStatusBtn = (tasks: TaskType[], taskId: string, newStatu
 export const usageAddNote = (database:ConceptWindowsPropsType[], newTitle:string) => {
     return [
         ...database,
-        {
+        {   
+            cwId: v1(),
             title: newTitle,
             tasks: []
         }
