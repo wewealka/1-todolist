@@ -1,22 +1,38 @@
-
 import styled from 'styled-components';
 import { InitialTasks } from '../data/DataAppBLL-1-todolist';
-import { ConceptWindows } from '../layout/ConceptWindows';
+import { ConceptWindows, ConceptWindowsPropsType } from '../layout/ConceptWindows';
 import { useState } from 'react';
 import { CombinedInput } from './input/InputU';
+import { usageRemoveWinBtn } from '../data/DataButton-2-todolist';
 
 export const TodoList = () => {
-    let [newNote, setNewNote] = useState(InitialTasks)
-    const [newTaskTitle, setNewTaskTitle] = useState("");
+    let [newNote, setNewNote] = useState<ConceptWindowsPropsType[]>(InitialTasks);
+    const [newTaskTitle, setNewTaskTitle] = useState<string>("");
+
+    const removeWindow = (cwId:string) => {
+        const newWitDelNote = usageRemoveWinBtn(newNote, cwId);
+        setNewNote(newWitDelNote);
+    };
 
     const taskList = newNote.map((taskGroup, index) => (
         <StyledTaskGroup key={index}>
-            <ConceptWindows mainObj={taskGroup}/>
+            <ConceptWindows
+                mainObj={taskGroup}
+                onRemoveWindow={removeWindow}
+            />
         </StyledTaskGroup>
     ));
+
     return (
         <StyledCon>
-            <div><CombinedInput newNote={newNote} setNewNote={setNewNote} newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle}/></div>
+            <div>
+                <CombinedInput
+                    newNote={newNote}
+                    setNewNote={setNewNote}
+                    newTaskTitle={newTaskTitle}
+                    setNewTaskTitle={setNewTaskTitle}
+                />
+            </div>
             <StyledTodoList>
                 {taskList}
             </StyledTodoList>
