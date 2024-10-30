@@ -1,60 +1,41 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { MainButton } from "../mainbtn/MainButton";
-import { usageAddTask, usageAddNote } from "../../data/DataButton-2-todolist";
-import { TaskType, ConceptWindowsPropsType } from "../../layout/ConceptWindows";
+import { TaskType } from "../../layout/ConceptWindows";
 
 type CombinedInputProps = {
     newTaskTitle: string;
     setNewTaskTitle: (title: string) => void;
-    tasksFilter?: TaskType[]; 
-    setTasksFilter?: React.Dispatch<React.SetStateAction<TaskType[]>>; 
-    newNote?: ConceptWindowsPropsType[]; 
-    setNewNote?: React.Dispatch<React.SetStateAction<ConceptWindowsPropsType[]>>; 
-    // tasksFilter?setTasksFilter? - 1func  newNote?setNewNote? - 2 func 
+    onSubmit: () => void; 
 };
 
 export const CombinedInput: React.FC<CombinedInputProps> = ({
     newTaskTitle,
     setNewTaskTitle,
-    tasksFilter,
-    setTasksFilter,
-    newNote,
-    setNewNote,
+    onSubmit,
 }) => {
     const [inputError, setInputError] = useState<boolean>(false);
-    const inputController = !newTaskTitle;
-    const uLM = `${20 - newTaskTitle.length} chars left`;
-    const uLMcontrollerUI = newTaskTitle.length > 20;
-    const uLMcontroller = newTaskTitle.length <= 20;
+    const isInputEmpty = !newTaskTitle.trim();
+    const charsLeft = 20 - newTaskTitle.length;
+    const isTooManyChars = newTaskTitle.length > 20;
 
     const newTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (value.trim() !== "" && !/ {2}/.test(value)) {
-            setInputError(false);
-        }
+        setInputError(false);
         setNewTaskTitle(value);
     };
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            uLMcontroller ? addNoteOrTask() : console.log("");
+    const handleSubmit = () => {
+        if (isInputEmpty || / {2}/.test(newTaskTitle)) {
+            setInputError(true);
+        } else {
+            onSubmit();
+            setInputError(false);
         }
     };
 
-    const addNoteOrTask = () => {
-        if (newTaskTitle?.trim() === "" || / {2}/.test(newTaskTitle || "")) {
-            setInputError(true);
-            setNewTaskTitle?.("");
-        } else if (tasksFilter && setTasksFilter) {
-            const updatedTasks = usageAddTask(tasksFilter, newTaskTitle);
-            setTasksFilter(updatedTasks);
-            setNewTaskTitle?.("");
-            setInputError(false);
-        } else if (newNote && setNewNote) {
-            const currentState = usageAddNote(newNote, newTaskTitle || "");
-            setNewNote(currentState);
-            setNewTaskTitle("");
-            setInputError(false);
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && !isTooManyChars) {
+            handleSubmit();
         }
     };
 
@@ -67,12 +48,14 @@ export const CombinedInput: React.FC<CombinedInputProps> = ({
                 className={inputError ? "error" : undefined}
             />
             <MainButton
-                disabled={inputController || uLMcontrollerUI}
+                disabled={isInputEmpty || isTooManyChars}
                 name={"+"}
-                callBack={addNoteOrTask}
+                callBack={handleSubmit}
             />
-            {(!inputController && !uLMcontrollerUI && !inputError) && <div>{uLM}</div>}
-            {uLMcontrollerUI && <div style={{ color: "red" }}>Too many chars</div>}
+            {!isInputEmpty && !isTooManyChars && !inputError && (
+                <div>{charsLeft} chars left</div>
+            )}
+            {isTooManyChars && <div style={{ color: "red" }}>Too many chars</div>}
             {inputError && <div style={{ color: "red" }}>Title is required!</div>}
         </div>
     );
