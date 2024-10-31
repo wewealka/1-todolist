@@ -8,17 +8,24 @@ import { usageAddNote, usageRemoveWinBtn } from '../data/DataButton-2-todolist';
 export const TodoList = () => {
     let [newNote, setNewNote] = useState<ConceptWindowsPropsType[]>(InitialTasks);
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
+    
 
     const removeWindow = (cwId: string) => {
         const updatedNotes = usageRemoveWinBtn(newNote, cwId);
         setNewNote(updatedNotes);
     };
 
-    const addNote = () => {
+    const addWindow = () => {
         const updatedNotes = usageAddNote(newNote, newTaskTitle);
         setNewNote(updatedNotes);
         setNewTaskTitle("");  
     };
+
+    const newTitleChanger = (taskId:string, newTitle: string) => {
+        const newTitleCw = newNote.map(t => t.cwId === taskId ? { ...t, title: newTitle } : t)
+        setNewNote (newTitleCw)
+    };
+
 
     return (
         <StyledCon>
@@ -27,7 +34,7 @@ export const TodoList = () => {
                 <CombinedInput
                     newTaskTitle={newTaskTitle}
                     setNewTaskTitle={setNewTaskTitle}
-                    onSubmit={addNote}
+                    onSubmit={addWindow}
                 />
             </StyledInput>
             <StyledTodoList>
@@ -36,6 +43,7 @@ export const TodoList = () => {
                         <ConceptWindows
                             mainObj={taskGroup}
                             onRemoveWindow={removeWindow}
+                            onNewTitleChangeHandler={newTitleChanger}
                         />
                     </StyledTaskGroup>
                 ))}
