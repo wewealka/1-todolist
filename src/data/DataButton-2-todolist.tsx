@@ -32,11 +32,11 @@ export const usageChangeStatusBtn = (tasks: TaskType[], taskId: string, newStatu
 
 export const usageAddNote = (database:ConceptWindowsPropsType[], newTitle:string) => {
     return [
-        ...database,
         {   
             cwId: v1(),
             title: newTitle,
             tasks: []
-        }
+        },
+        ...database
     ];
 }
