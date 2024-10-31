@@ -1,10 +1,12 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { usageAddTask, usageChangeStatusBtn, usageFilterBtn, usageRemoveBtn } from "../data/DataButton-2-todolist";
 import { MainButton } from "../components/mainbtn/MainButton";
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { CombinedInput } from "../components/input/InputU";
+import { EditableSpan } from "../components/editableSpan/EditableSpan";
 
 export type FiltersValuesType = "All" | "Active" | "Completed";
+
 export type TaskType = {
     id: string;
     title: string;
@@ -18,9 +20,11 @@ export type ConceptWindowsPropsType = {
 export type MainType = {
     mainObj: ConceptWindowsPropsType;
     onRemoveWindow: (title: string) => void;
+    onNewTitleChangeHandler:(taskId:string, newTitle: string) => void
+
 };
 
-export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) => {
+export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow, onNewTitleChangeHandler }) => {
     const [listRef] = useAutoAnimate<HTMLUListElement>();
     const [tasks, setTasks] = useState<TaskType[]>(mainObj.tasks);
     const [activeFilter, setActiveFilter] = useState<FiltersValuesType>("All");
@@ -42,6 +46,14 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
         setNewTaskTitle(""); 
     };
 
+    const newTitleTaskChangeHandler = (taskId:string, newTitle: string) => {
+        const newTask = tasks.map(t => t.id === taskId ? { ...t, title: newTitle } : t)
+        setTasks(newTask)
+    };
+
+
+
+
     const filteredTasks = usageFilterBtn(tasks, activeFilter);
 
     const taskList = filteredTasks.map((task: TaskType) => (
@@ -51,7 +63,7 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
                 onChange={(e) => changeStatus(task.id, e.currentTarget.checked)}
                 checked={task.isDone}
             />
-            <span className={task.isDone ? "task-done" : "task"}>{task.title}</span>
+            <EditableSpan title={task.title} onChange={(str)=> newTitleTaskChangeHandler(task.id, str) }/>
             <MainButton name={"X"} callBack={() => removeTask(task.id)} />
         </li>
     ));
@@ -59,10 +71,11 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
     return (
         <div>
             <h3>
-                {mainObj.title}
+            <EditableSpan title={mainObj.title} onChange={(str)=> onNewTitleChangeHandler(mainObj.cwId, str)}/>
                 <MainButton name={"X"} callBack={() => onRemoveWindow(mainObj.cwId)} />
             </h3>
             <div>
+                <p>add task ⬇</p>
                 <CombinedInput
                     newTaskTitle={newTaskTitle}
                     setNewTaskTitle={setNewTaskTitle}
@@ -85,3 +98,4 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow }) 
         </div>
     );
 };
+
