@@ -1,15 +1,24 @@
 
 import './App.css';
-import { TodoList } from './components/TodoList';
+import { TodoListKey } from './associative-array/components/Todolits-1';
+import { TodoList } from './deep-nesting/components/TodoList';
+import React, { Profiler } from 'react';
+
 
 
 
 
 
 export function App() {
+
+    
     return (
         <div className="App">
             <TodoList/>
+            <TodoListKey/> 
+            <p style={{display:"none"}}>check "perfomance" -
+                associative-array renders fuster than deep-nesting
+            </p>
         </div>
     );
 }
