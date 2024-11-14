@@ -14,19 +14,16 @@ export const TodoList = () => {
     
 
     const removeWindow = (cwId: string) => {
-        const updatedNotes = usageRemoveWinBtn(newNote, cwId);
-        setNewNote(updatedNotes);
+        setNewNote(usageRemoveWinBtn(newNote, cwId));
     };
 
     const addWindow = () => {
-        const updatedNotes = usageAddNote(newNote, newTaskTitle);
-        setNewNote(updatedNotes);
+        setNewNote(usageAddNote(newNote, newTaskTitle));
         setNewTaskTitle("");  
     };
 
-    const newTitleChanger = (taskId:string, newTitle: string) => {
-        const newTitleCw = newNote.map(t => t.cwId === taskId ? { ...t, title: newTitle } : t)
-        setNewNote (newTitleCw)
+    const newTitleChanger = (taskId:string, newTitle: string) => { 
+        setNewNote (newNote.map(t => t.cwId === taskId ? { ...t, title: newTitle } : t))
     };
 
 

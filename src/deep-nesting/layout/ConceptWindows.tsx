@@ -32,24 +32,20 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow, on
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
     const removeTask = (id: string) => {
-        const updatedTasks = usageRemoveBtn(tasks, id);
-        setTasks(updatedTasks);
+        setTasks(usageRemoveBtn(tasks, id));
     };
 
     const changeStatus = (id: string, newStatus: boolean) => {
-        const updatedTasks = usageChangeStatusBtn(tasks, id, newStatus);
-        setTasks(updatedTasks);
+        setTasks(usageChangeStatusBtn(tasks, id, newStatus));
     };
 
     const addTask = () => {
-        const updatedTasks = usageAddTask(tasks, newTaskTitle);
-        setTasks(updatedTasks);
+        setTasks(usageAddTask(tasks, newTaskTitle));
         setNewTaskTitle(""); 
     };
 
     const newTitleTaskChangeHandler = (taskId:string, newTitle: string) => {
-        const newTask = tasks.map(t => t.id === taskId ? { ...t, title: newTitle } : t)
-        setTasks(newTask)
+        setTasks(tasks.map(t => t.id === taskId ? { ...t, title: newTitle } : t))
     };
 
 
