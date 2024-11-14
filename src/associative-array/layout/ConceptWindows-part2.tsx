@@ -40,29 +40,25 @@ export const ConceptWindows: React.FC<MainType> = ({ mainObj, onRemoveWindow, on
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
     const addTaskHandler = () => {
-        const updatedTasks = addTask(mainObj.tasks, newTaskTitle, mainObj.exObj.cwId);
-        mainObj.setTasks(updatedTasks);
+        mainObj.setTasks(addTask(mainObj.tasks, newTaskTitle, mainObj.exObj.cwId));
         setNewTaskTitle("");
     }
 
     const removeTaskHandler = (taskId: string) => {
-        const updatedTasks = removeTask(mainObj.tasks, taskId, mainObj.exObj.cwId);
-        mainObj.setTasks(updatedTasks);
+        mainObj.setTasks(removeTask(mainObj.tasks, taskId, mainObj.exObj.cwId));
     }
 
     const changeStatus = (id: string, newStatus: boolean) => {
-        const updatedTasks = usageChangeStatusBtn(mainObj.tasks, id, mainObj.exObj.cwId, newStatus);
-        mainObj.setTasks(updatedTasks);
+        mainObj.setTasks(usageChangeStatusBtn(mainObj.tasks, id, mainObj.exObj.cwId, newStatus));
     }
 
     const newTitleTaskChangeHandler = (taskId: string, newTitle: string) => {
-        const updatedTasks = {
+        mainObj.setTasks({
             ...mainObj.tasks,
             [mainObj.exObj.cwId]: mainObj.tasks[mainObj.exObj.cwId].map(t =>
                 t.id === taskId ? { ...t, title: newTitle } : t
             ),
-        };
-        mainObj.setTasks(updatedTasks);
+        });
     }
 
     const filteredTasks = usageFilterBtn(mainObj.tasks, activeFilter, mainObj.exObj.cwId);

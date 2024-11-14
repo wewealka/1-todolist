@@ -12,21 +12,18 @@ export const TodoListKey = () => {
     const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
     const removeWindow = (cwId: string) => {
-        const updatedNotes = usageRemoveWinBtn(newNote, cwId);
-        setNewNote(updatedNotes);
+        setNewNote(usageRemoveWinBtn(newNote, cwId));
     };
 
     const addWindow = () => {
         const keyListId = v1();
-        const updatedNotes = usageAddNote(newNote, newTaskTitle, keyListId);
-        setNewNote(updatedNotes);
+        setNewNote(usageAddNote(newNote, newTaskTitle, keyListId));
         setInternalData({ ...internalData, [keyListId]: [] }); 
         setNewTaskTitle("");
     };
 
     const newTitleChanger = (taskId: string, newTitle: string) => {
-        const newTitleCw = newNote.map(t => t.cwId === taskId ? { ...t, title: newTitle } : t);
-        setNewNote(newTitleCw);
+        setNewNote(newNote.map(t => t.cwId === taskId ? { ...t, title: newTitle } : t));
     };
 
     return (
