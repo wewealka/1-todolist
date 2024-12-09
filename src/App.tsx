@@ -1,7 +1,8 @@
 
 import './App.css';
-import { TodoListKey } from './associative-array/components/Todolits-1';
-import { TodoList } from './deep-nesting/components/TodoList';
+// import { TodoListKey } from './associative-array/components/Todolits-1';
+// import { TodoList } from './deep-nesting/components/TodoList';
+import MainWidArr from './mainVersion/associative-array/layout/MainArrMeth';
 
 
 
@@ -14,11 +15,9 @@ export function App() {
     
     return (
         <div className="App">
-            <TodoList/>
-            <TodoListKey/> 
-            <p style={{display:"none"}}>check "perfomance" -
-                associative-array renders fuster than deep-nesting
-            </p>
+            {/* <TodoList/>
+            <TodoListKey/>  */}
+            <MainWidArr/>
         </div>
     );
 }
