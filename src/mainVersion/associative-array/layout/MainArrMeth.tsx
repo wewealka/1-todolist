@@ -3,6 +3,8 @@ import { v1 } from 'uuid';
 import { Todolist } from './todolist/Todolist';
 import { FilterValuesType, initialEXternalData, initialINternalData, todolistsType } from '../data/DataApp';
 import { CombinedInput } from '../components/Input';
+import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
 
 function MainWidArr() {
     const [todolists, setTodolists] = useState<Array<todolistsType>>(initialEXternalData);
@@ -37,7 +39,7 @@ function MainWidArr() {
                 filter: 'all',
             };
             setTodolists([newTodolist, ...todolists]);
-            setTasks({ ...tasks, [newTodolistId]: [] }); // Инициализация массива задач для нового Todolist
+            setTasks({ ...tasks, [newTodolistId]: [] });
             setNewTaskTitle("");
         }
     };
@@ -52,40 +54,61 @@ function MainWidArr() {
     const spansChanger = (keyListId: string, title: string) => {
         setTodolists(todolists.map(t => t.cwId === keyListId ? { ...t, title } : t));
     };
-    
+
     const changeTaskTitle = (keyListId: string, taskId: string, newTitle: string) => {
-        setTasks({...tasks,[keyListId]: tasks[keyListId].map(t => t.id === taskId ? { ...t, title: newTitle } : t)});
+        setTasks({ ...tasks, [keyListId]: tasks[keyListId].map(t => t.id === taskId ? { ...t, title: newTitle } : t) });
     };
 
 
     return (
-        <div style={{ display: "flex", border: "1px solid red", width: "1280px", flexWrap: "wrap", gap: "15px", margin:"100px"}}>
-            <CombinedInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle} onSubmit={addNoteHandler} />
-            {todolists.map((todolist: todolistsType) => {
-                let tasksForTodolist = tasks[todolist.cwId] || [];
-                if (todolist.filter === "active") {
-                    tasksForTodolist = tasksForTodolist.filter(t => !t.isDone);
-                }
-                if (todolist.filter === "completed") {
-                    tasksForTodolist = tasksForTodolist.filter(t => t.isDone);
-                }
-                return (
-                    <Todolist
-                        key={todolist.cwId}
-                        keyListId={todolist.cwId}
-                        title={todolist.title}
-                        tasks={tasksForTodolist}
-                        removeTask={removeTask}
-                        changeFilter={changeFilter}
-                        addTask={addTask}
-                        changeTaskStatus={changeStatus}
-                        filter={todolist.filter}
-                        removeNote={removeNote}
-                        spansChanger={spansChanger}
-                        changeTaskTitle={changeTaskTitle}
-                    />
-                );
-            })}
+        <div>
+            <AppBar position='static'>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu />
+                    </IconButton>
+                    <Typography variant='h6'>
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding: "20px"}}>
+                    <CombinedInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle} onSubmit={addNoteHandler} />
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolists.map((todolist: todolistsType) => {
+                        let tasksForTodolist = tasks[todolist.cwId] || [];
+                        if (todolist.filter === "active") {
+                            tasksForTodolist = tasksForTodolist.filter(t => !t.isDone);
+                        }
+                        if (todolist.filter === "completed") {
+                            tasksForTodolist = tasksForTodolist.filter(t => t.isDone);
+                        }
+                        return (
+                            <Grid item>
+                                <Paper style={{padding: "10px"}} elevation={3}>
+                                    <Todolist
+                                        key={todolist.cwId}
+                                        keyListId={todolist.cwId}
+                                        title={todolist.title}
+                                        tasks={tasksForTodolist}
+                                        removeTask={removeTask}
+                                        changeFilter={changeFilter}
+                                        addTask={addTask}
+                                        changeTaskStatus={changeStatus}
+                                        filter={todolist.filter}
+                                        removeNote={removeNote}
+                                        spansChanger={spansChanger}
+                                        changeTaskTitle={changeTaskTitle}
+                                    />
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </Container>
         </div>
     );
 }

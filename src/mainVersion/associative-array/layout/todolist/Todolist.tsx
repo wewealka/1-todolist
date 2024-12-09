@@ -1,7 +1,11 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { FilterValuesType } from '../../data/DataApp';
-import { Button } from '../../components/Button';
+import { RemoveButton} from '../../components/Button';
 import { EditableSpan } from '../../components/Span';
+import { Button, Checkbox } from '@material-ui/core';
+import { CombinedInput } from '../../components/Input';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 
 type TaskType = {
     id: string;
@@ -24,28 +28,8 @@ type PropsType = {
 };
 
 export function Todolist(props: PropsType) {
-    const [title, setTitle] = useState("");
-    const [error, setError] = useState<string | null>(null);
-
-    const addTask = () => {
-        if (title.trim() !== "") {
-            props.addTask(props.keyListId, title.trim());
-            setTitle("");
-        } else {
-            setError("Title is required");
-        }
-    };
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value);
-        if (error) setError(null); 
-    };
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.charCode === 13) {
-            addTask();
-        }
-    };
+    const [title, setTitle] = useState<string>("");
+    const [listRef] = useAutoAnimate<HTMLUListElement>();
 
     const onSpanChangeHandler = () => {
         props.spansChanger(props.keyListId, title)
@@ -53,6 +37,13 @@ export function Todolist(props: PropsType) {
     const onSpanTaskChangeHandler = (taskId: string, newTitle: string) => {
         props.changeTaskTitle(props.keyListId, taskId, newTitle);
     };
+    const addTaskHandler = () => {
+        props.addTask(props.keyListId, title)
+        setTitle("")
+    }
+    const removeNoteHandler = () => {
+        props.removeNote(props.keyListId)
+    }
 
     return (
         <div >
@@ -60,41 +51,29 @@ export function Todolist(props: PropsType) {
                 title={props.title}
                 onChange={onSpanChangeHandler}
             />
-            <Button name="X" callBack={() => props.removeNote(props.keyListId)} />
+            <RemoveButton callBack={removeNoteHandler} />
             <div>
-                <input
-                    value={title}
-                    onChange={onChangeHandler}
-                    onKeyDown={onKeyPressHandler}
-                    className={error ? "error" : ""}
-                />
-                <Button name="+" callBack={addTask} />
-                {error && <div className="error-message">{error}</div>}
+                <CombinedInput newTaskTitle={title} setNewTaskTitle={setTitle} onSubmit={addTaskHandler}/>
             </div>
-            <ul>
+            <ul ref={listRef} style={{listStyleType:"none"}}>
                 {props.tasks.map(t => {
-                    const onClickHandler = () => props.removeTask(props.keyListId, t.id);
+                    const onClickRemoveHandler = () => props.removeTask(props.keyListId, t.id);
                     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                         props.changeTaskStatus(props.keyListId, t.id, e.currentTarget.checked);
                     };
-
                     return (
-                        <li key={t.id} className={t.isDone ? "is-done" : ""}>
-                            <input
-                                type="checkbox"
-                                onChange={onChangeHandler}
-                                checked={t.isDone}
-                            />
+                        <li key={t.id} className={t.isDone ? "task-done" : ""}>
+                            <Checkbox onChange={onChangeHandler}checked={t.isDone} color={"error"} />
                             <EditableSpan title={t.title} onChange={(newTitle) => onSpanTaskChangeHandler(t.id, newTitle)} />
-                            <Button name="X" callBack={onClickHandler} />
+                            <RemoveButton callBack={onClickRemoveHandler} />
                         </li>
                     );
                 })}
             </ul>
             <div>
-                <Button name="All" className={props.filter === 'all' ? "active-filter" : ""} callBack={() => props.changeFilter(props.keyListId, "all")} />
-                <Button name="Active" className={props.filter === 'active' ? "active-filter" : ""} callBack={() => props.changeFilter(props.keyListId, "active")} />
-                <Button name="Completed" className={props.filter === 'completed' ? "active-filter" : ""} callBack={() => props.changeFilter(props.keyListId, "completed")} />
+                <Button variant={props.filter === 'all' ? "contained" : "text"} onClick={() => props.changeFilter(props.keyListId, "all")} color={"error"} >All</Button>
+                <Button variant={props.filter === 'active' ? "contained" : "text"} onClick={() => props.changeFilter(props.keyListId, "active")} color={"primary"}>Active</Button>
+                <Button variant={props.filter === 'completed' ? "contained" : "text"} onClick={() => props.changeFilter(props.keyListId, "completed")} color={"secondary"}>Completed</Button>
             </div>
         </div>
     );

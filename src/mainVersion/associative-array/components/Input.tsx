@@ -1,5 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { Button } from "./Button";
+import { AddButton } from "./Button";
+import { TextField } from "@material-ui/core";
 
 
 type CombinedInputProps = {
@@ -25,7 +26,7 @@ export const CombinedInput: React.FC<CombinedInputProps> = ({
     };
 
     const handleSubmit = () => {
-        if (isInputEmpty || / {2}/.test(newTaskTitle)) {
+        if (isInputEmpty) {
             setInputError(true);
         } else {
             onSubmit();
@@ -41,14 +42,16 @@ export const CombinedInput: React.FC<CombinedInputProps> = ({
 
     return (
         <div>
-            <input
+            <TextField
                 value={newTaskTitle}
+                variant={"outlined"}
+                label={"Add new"}
                 onChange={newTitleChangeHandler}
                 onKeyDown={onKeyPressHandler}
-                className={inputError ? "error" : undefined}
+                error={!!inputError}
             />
-            <Button
-                disabled={isInputEmpty || isTooManyChars}
+            <AddButton
+                disabled={isTooManyChars}
                 name={"+"}
                 callBack={handleSubmit}
             />
@@ -60,3 +63,13 @@ export const CombinedInput: React.FC<CombinedInputProps> = ({
         </div>
     );
 };
+
+// const handleSubmit = () => {
+//     if (isInputEmpty || / {2}/.test(newTaskTitle)) {
+//         setInputError(true);
+//     } else {
+//         onSubmit();
+//         setInputError(false);
+//     }
+// };
+// custom errorcatcher: check is empty  && check how much spaces were. in our case - (2) - {2}. This handler allows to get diff callbacks && u can reuse this componetn in ur project. 
