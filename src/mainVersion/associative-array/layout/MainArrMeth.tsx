@@ -31,15 +31,10 @@ function MainWidArr() {
     };
 
     const addNoteHandler = () => {
+        const newId = v1()
         if (newTaskTitle.trim()) {
-            const newTodolistId = v1();
-            const newTodolist: todolistsType = {
-                cwId: newTodolistId,
-                title: newTaskTitle,
-                filter: 'all',
-            };
-            setTodolists([newTodolist, ...todolists]);
-            setTasks({ ...tasks, [newTodolistId]: [] });
+            setTodolists([{cwId: newId,title: newTaskTitle,filter: 'all'}, ...todolists]);
+            setTasks({ ...tasks, [newId]: [] });
             setNewTaskTitle("");
         }
     };

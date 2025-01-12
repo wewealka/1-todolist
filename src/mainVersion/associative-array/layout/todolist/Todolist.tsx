@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChangeEvent, useState } from 'react';
 import { FilterValuesType } from '../../data/DataApp';
 import { RemoveButton} from '../../components/Button';
@@ -27,7 +28,7 @@ type PropsType = {
     changeTaskTitle: (keyListId: string, taskId: string, newTitle: string) => void
 };
 
-export function Todolist(props: PropsType) {
+export const Todolist = React.memo((props: PropsType) => {
     const [title, setTitle] = useState<string>("");
     const [listRef] = useAutoAnimate<HTMLUListElement>();
 
@@ -77,4 +78,4 @@ export function Todolist(props: PropsType) {
             </div>
         </div>
     );
-}
+})
