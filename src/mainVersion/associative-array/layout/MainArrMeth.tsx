@@ -30,7 +30,7 @@ function MainWidArr() {
         setTodolists(todolists.map(t => t.cwId === keyListId ? { ...t, filter: value } : t));
     };
 
-    const addNoteHandler = () => {
+    const addTodolistHandler = () => {
         const newId = v1()
         if (newTaskTitle.trim()) {
             setTodolists([{cwId: newId,title: newTaskTitle,filter: 'all'}, ...todolists]);
@@ -39,7 +39,7 @@ function MainWidArr() {
         }
     };
 
-    const removeNote = (keyListId: string) => {
+    const removeTodolist = (keyListId: string) => {
         setTodolists(todolists.filter(todolist => todolist.cwId !== keyListId));
         const updatedTasks = { ...tasks };
         delete updatedTasks[keyListId];
@@ -70,7 +70,7 @@ function MainWidArr() {
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: "20px"}}>
-                    <CombinedInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle} onSubmit={addNoteHandler} />
+                    <CombinedInput newTaskTitle={newTaskTitle} setNewTaskTitle={setNewTaskTitle} onSubmit={addTodolistHandler} />
                 </Grid>
                 <Grid container spacing={3}>
                     {todolists.map((todolist: todolistsType) => {
@@ -94,7 +94,7 @@ function MainWidArr() {
                                         addTask={addTask}
                                         changeTaskStatus={changeStatus}
                                         filter={todolist.filter}
-                                        removeNote={removeNote}
+                                        removeNote={removeTodolist}
                                         spansChanger={spansChanger}
                                         changeTaskTitle={changeTaskTitle}
                                     />
