@@ -8,13 +8,12 @@ import {
 import {
     FilterValuesType,
     initialEXternalData,
-    initialINternalData,
     todolistsType
 } from "../../mainVersion/associative-array/data/DataApp";
 
 
 const startStateEX: Array<todolistsType> = (initialEXternalData);
-const startStateIN = (initialINternalData)
+
 
 test('correct todolist should be removed', () => {
     const endState = todolistReducer(startStateEX, RemoveTodolistAC(initialEXternalData[0].cwId))
@@ -24,12 +23,12 @@ test('correct todolist should be removed', () => {
 });
 test('correct todolist should be added', () => {
 
-    const newTodolistTtile = 'New Todolist Title'
+    const newTodolistTitle = 'New Todolist Title'
 
-    const endState = todolistReducer(startStateEX, AddTodolistAC(newTodolistTtile))
+    const endState = todolistReducer(startStateEX, AddTodolistAC(newTodolistTitle))
 
     expect(endState.length).toBe(7)
-    expect(endState[0].title).toBe(newTodolistTtile)
+    expect(endState[0].title).toBe(newTodolistTitle)
     expect(endState[0].filter).toBe('all')
 });
 test('correct todolist should change name', () => {
